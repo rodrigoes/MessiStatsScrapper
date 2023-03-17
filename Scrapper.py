@@ -35,16 +35,16 @@ def extract_table_data(table):
             data.append({
                 "Game": cells[0].text.strip(),
                 "Date": cells[1].text.strip(),
-                "CMP": cells[2].text.split("\n")[-1].strip(),
+                "Competition": cells[2].text.split("\n")[-1].strip(),
                 "Home team": cells[3].text.strip(),
                 "Result": cells[4].text.strip(),
                 "Away team": cells[5].text.strip(),
-                "LU": cells[6].text.split("\n")[-1].strip(),
-                "MI": cells[7].text.strip(),
-                "GO": cells[8].text.strip(),
-                "AS": cells[9].text.strip(),
-                "CA": cells[10].text.strip(),
-                "JS": cells[11].text.strip(),
+                "Lineup": cells[6].text.split("\n")[-1].strip(),
+                "Minutes": cells[7].text.strip(),
+                "Goals": cells[8].text.strip(),
+                "Assists": cells[9].text.strip(),
+                "Cards": cells[10].text.strip(),
+                "Jersey": cells[11].text.strip(),
             })
     return data
 
@@ -63,5 +63,25 @@ if __name__ == "__main__":
         table = parse_html(html)
         data = extract_table_data(table)
         save_data_to_file(data, "table_data.json")
+        print("""
+    __  ___               _    _____                                      
+   /  |/  /__  __________(_)  / ___/______________ _____  ____  ___  _____
+  / /|_/ / _ \/ ___/ ___/ /   \__ \/ ___/ ___/ __ `/ __ \/ __ \/ _ \/ ___/
+ / /  / /  __(__  |__  ) /   ___/ / /__/ /  / /_/ / /_/ / /_/ /  __/ /    
+/_/  /_/\___/____/____/_/   /____/\___/_/   \__,_/ .___/ .___/\___/_/     
+                                                /_/   /_/   
+                                                        
+            Data Source: https://messi.starplayerstats.com
+""")
     except Exception as e:
         print(f"Error: {e}")
+
+
+# with open('table_data.json') as json_file:
+#     data = json.load(json_file)
+#     sum = 0
+#     for p in data:
+#         sum += int(p['GO'])
+#     print(sum)
+
+
