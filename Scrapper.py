@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import csv
 
 
 def make_request(url):
@@ -49,9 +50,18 @@ def extract_table_data(table):
     return data
 
 
-def save_data_to_file(data, filename):
+def save_data_to_json(data, filename):
     with open(filename, "w") as outfile:
         json.dump(data, outfile)
+    print(f"Data saved to {filename}")
+
+
+def save_data_to_csv(data, filename):
+    with open(filename, "w", newline="") as outfile:
+        writer = csv.writer(outfile)
+        writer.writerow(["Game", "Date", "Competition", "Home team", "Result", "Away team", "Lineup", "Minutes", "Goals", "Assists", "Cards", "Jersey"])
+        for item in data:
+            writer.writerow([item["Game"], item["Date"], item["Competition"], item["Home team"], item["Result"], item["Away team"], item["Lineup"], item["Minutes"], item["Goals"], item["Assists"], item["Cards"], item["Jersey"]])
     print(f"Data saved to {filename}")
 
 
@@ -62,7 +72,8 @@ if __name__ == "__main__":
         html = make_request(url)
         table = parse_html(html)
         data = extract_table_data(table)
-        save_data_to_file(data, "table_data.json")
+        save_data_to_json(data, "table_data.json")
+        save_data_to_csv(data, "table_data.csv")
         print("""
     __  ___               _    _____                                      
    /  |/  /__  __________(_)  / ___/______________ _____  ____  ___  _____
