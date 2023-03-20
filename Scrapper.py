@@ -1,14 +1,13 @@
+import csv
+import json
 import requests
 from bs4 import BeautifulSoup
-import json
-import csv
 
 
 def make_request(url):
     response = requests.get(url)
     response.raise_for_status()
     return response.content
-
 
 def parse_html(html):
     soup = BeautifulSoup(html, "html.parser")
@@ -25,7 +24,6 @@ def parse_html(html):
     if table is None:
         raise ValueError("Table not found")
     return table
-
 
 def extract_table_data(table):
     data = []
@@ -49,12 +47,30 @@ def extract_table_data(table):
             })
     return data
 
-
 def save_data_to_json(data, filename):
     with open(filename, "w") as outfile:
         json.dump(data, outfile)
     print(f"Data saved to {filename}")
 
+def calculate_stats(data, filename):
+    aggregated_data = {
+        "Games": len(data),
+        "Goals": sum([int(game["Goals"]) for game in data]),
+        "Assists": sum([int(game["Assists"]) for game in data]),
+        "Cards": sum([int(game["Cards"]) for game in data]),
+        "Minutes": sum([int(game["Minutes"]) for game in data])
+    }
+    jersey_data = {}
+    for game in data:
+        jersey = int(game["Jersey"])
+        if jersey in jersey_data:
+            jersey_data[jersey] += 1
+        else:
+            jersey_data[jersey] = 1
+    aggregated_data["Jersey"] = jersey_data
+    with open(filename, "w") as outfile:
+        json.dump(aggregated_data, outfile)
+    print(f"Data saved to {filename}")
 
 def save_data_to_csv(data, filename):
     with open(filename, "w", newline="") as outfile:
@@ -63,7 +79,6 @@ def save_data_to_csv(data, filename):
         for item in data:
             writer.writerow([item["Game"], item["Date"], item["Competition"], item["Home team"], item["Result"], item["Away team"], item["Lineup"], item["Minutes"], item["Goals"], item["Assists"], item["Cards"], item["Jersey"]])
     print(f"Data saved to {filename}")
-
 
 if __name__ == "__main__":
     url = "https://messi.starplayerstats.com/en/games/0/0/all/0/0/0/t/0/0/0/1"
@@ -74,6 +89,8 @@ if __name__ == "__main__":
         data = extract_table_data(table)
         save_data_to_json(data, "table_data.json")
         save_data_to_csv(data, "table_data.csv")
+        totals_json = calculate_stats(data,'aggregated_data.json')
+
         print("""
     __  ___               _    _____                                      
    /  |/  /__  __________(_)  / ___/______________ _____  ____  ___  _____
@@ -87,12 +104,5 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Error: {e}")
 
-
-# with open('table_data.json') as json_file:
-#     data = json.load(json_file)
-#     sum = 0
-#     for p in data:
-#         sum += int(p['GO'])
-#     print(sum)
 
 
