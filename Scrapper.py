@@ -58,7 +58,11 @@ def calculate_stats(data, filename):
         "Goals": sum([int(game["Goals"]) for game in data]),
         "Assists": sum([int(game["Assists"]) for game in data]),
         "Cards": sum([int(game["Cards"]) for game in data]),
-        "Minutes": sum([int(game["Minutes"]) for game in data])
+        "Minutes": sum([int(game["Minutes"]) for game in data]),
+        "Goals + Assists": sum([int(game["Goals"]) + int(game["Assists"]) for game in data]),
+        "Goals per game": round(sum([int(game["Goals"]) for game in data]) / len(data),2),
+        "Club Goals": sum([int(game["Goals"]) for game in data if game["Away team"] != "Argentina" and game["Home team"] != "Argentina"]),
+        "National Team Goals": sum([int(game["Goals"]) for game in data if game["Away team"] == "Argentina" or game["Home team"] == "Argentina"]),
     }
     jersey_data = {}
     for game in data:
