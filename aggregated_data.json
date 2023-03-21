@@ -1,1 +1,12 @@
-{"Games": 1015, "Goals": 799, "Assists": 353, "Cards": 95, "Minutes": 83350, "Jersey": {"30": 98, "10": 805, "18": 24, "19": 88}}
+{
+  "Games": 1015,
+  "Goals": 799,
+  "Assists": 353,
+  "Cards": 95,
+  "Minutes": 83350,
+  "Goals + Assists": 1152,
+  "Goals per game": 0.79,
+  "Club Goals": 701,
+  "National Team Goals": 98,
+  "Jersey": { "30": 98, "10": 805, "18": 24, "19": 88 }
+}
