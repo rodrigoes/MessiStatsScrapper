@@ -25,7 +25,7 @@ def parse_html(html):
         raise ValueError("Table not found")
     return table
 
-def extract_table_data(table):
+def extract_games(table):
     data = []
     rows = table.find_all("tr")
     for row in rows:
@@ -47,6 +47,27 @@ def extract_table_data(table):
             })
     return data
 
+def extract_goals(table):
+    data = []
+    rows = table.find_all("tr")
+    for row in rows:
+        cells = row.find_all("td")
+        if cells:
+            data.append({
+                "Number": cells[0].text.strip(),
+                "Date": cells[1].text.strip(),
+                "Competiton": cells[2].text.split("\n")[-1].strip(),
+                "Home team": cells[3].text.strip(),
+                "Result": cells[4].text.strip(),
+                "Away team": cells[5].text.strip(),
+                "Minute": cells[6].text.strip(),
+                "Score": cells[7].text.strip(),
+                "Whats": cells[8].text.strip(),
+                "How": cells[9].text.strip(),
+                "Jersey": cells[10].text.strip(),
+            })
+    return data
+
 def save_data_to_json(data, filename):
     with open(filename, "w") as outfile:
         json.dump(data, outfile)
@@ -64,6 +85,7 @@ def calculate_stats(data, filename):
         "Club Goals": sum([int(game["Goals"]) for game in data if game["Away team"] != "Argentina" and game["Home team"] != "Argentina"]),
         "National Team Goals": sum([int(game["Goals"]) for game in data if game["Away team"] == "Argentina" or game["Home team"] == "Argentina"]),
     }
+    
     jersey_data = {}
     for game in data:
         jersey = int(game["Jersey"])
@@ -72,6 +94,19 @@ def calculate_stats(data, filename):
         else:
             jersey_data[jersey] = 1
     aggregated_data["Jersey"] = jersey_data
+    
+    # inclui os tipos de gols e conta a frequência de cada um
+    goal_types = {}
+    with open('goal_data.json', 'r') as f:
+        goal_data = json.load(f)
+    for goal in goal_data:
+        goal_type = goal["How"]
+        if goal_type in goal_types:
+            goal_types[goal_type] += 1
+        else:
+            goal_types[goal_type] = 1
+    aggregated_data["Goal Types"] = goal_types
+    
     with open(filename, "w") as outfile:
         json.dump(aggregated_data, outfile)
     print(f"Data saved to {filename}")
@@ -84,17 +119,48 @@ def save_data_to_csv(data, filename):
             writer.writerow([item["Game"], item["Date"], item["Competition"], item["Home team"], item["Result"], item["Away team"], item["Lineup"], item["Minutes"], item["Goals"], item["Assists"], item["Cards"], item["Jersey"]])
     print(f"Data saved to {filename}")
 
+def compare_goals():
+     # carrega os dados do arquivo table_data.json
+    with open('table_data.json', 'r') as f:
+        table_data = json.load(f)
+
+    # carrega os dados do arquivo goal_data.json
+    with open('goal_data.json', 'r') as f:
+        goal_data = json.load(f)
+
+    # cria um dicionário que usa a Date como chave e contém informações do jogo e dos gols marcados
+    game_data = {}
+
+    for game in table_data:
+        date = game['Date']
+        game_data[date] = game.copy()
+        game_data[date]['Goals'] = []
+
+    for goal in goal_data:
+        date = goal['Date']
+        if date in game_data:
+            game_data[date]['Goals'].append(goal)
+
+    # salva o arquivo table_data_expanded.json com as informações dos gols
+    with open('table_data_expanded.json', 'w') as f:
+        json.dump(list(game_data.values()), f, indent=4)
+        
 if __name__ == "__main__":
-    url = "https://messi.starplayerstats.com/en/games/0/0/all/0/0/0/t/0/0/0/1"
-
+    
+    urlGames = "https://messi.starplayerstats.com/en/games/0/0/all/0/0/0/t/0/0/0/1"
+    urlGoals = "https://messi.starplayerstats.com/en/goals/0/0/all/0/0/0/t/all/all/0/0/1"
     try:
-        html = make_request(url)
-        table = parse_html(html)
-        data = extract_table_data(table)
-        save_data_to_json(data, "table_data.json")
-        save_data_to_csv(data, "table_data.csv")
-        totals_json = calculate_stats(data,'aggregated_data.json')
-
+        html_games = make_request(urlGames)
+        html_goals = make_request(urlGoals)
+        table_games = parse_html(html_games)
+        table_goals = parse_html(html_goals)
+        data_games = extract_games(table_games)
+        data_goals = extract_goals(table_goals)
+        save_data_to_json(data_games, "table_data.json")
+        save_data_to_json(data_goals, "goal_data.json")
+        save_data_to_csv(data_games, "table_data.csv")
+        totals_json = calculate_stats(data_games,'aggregated_data.json')
+        compare_goals()
         print("""
     __  ___               _    _____                                      
    /  |/  /__  __________(_)  / ___/______________ _____  ____  ___  _____
@@ -105,6 +171,7 @@ if __name__ == "__main__":
                                                         
             Data Source: https://messi.starplayerstats.com
 """)
+    
     except Exception as e:
         print(f"Error: {e}")
 
