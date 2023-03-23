@@ -121,7 +121,7 @@ def save_data_to_csv(data, filename):
 
 def compare_goals():
      # carrega os dados do arquivo table_data.json
-    with open('table_data.json', 'r') as f:
+    with open('game_data.json', 'r') as f:
         table_data = json.load(f)
 
     # carrega os dados do arquivo goal_data.json
@@ -141,8 +141,7 @@ def compare_goals():
         if date in game_data:
             game_data[date]['Goals'].append(goal)
 
-    # salva o arquivo table_data_expanded.json com as informações dos gols
-    with open('table_data_expanded.json', 'w') as f:
+    with open('game_data_expanded.json', 'w') as f:
         json.dump(list(game_data.values()), f, indent=4)
         
 if __name__ == "__main__":
@@ -156,9 +155,9 @@ if __name__ == "__main__":
         table_goals = parse_html(html_goals)
         data_games = extract_games(table_games)
         data_goals = extract_goals(table_goals)
-        save_data_to_json(data_games, "table_data.json")
+        save_data_to_json(data_games, "game_data.json")
         save_data_to_json(data_goals, "goal_data.json")
-        save_data_to_csv(data_games, "table_data.csv")
+        save_data_to_csv(data_games, "game_data.csv")
         totals_json = calculate_stats(data_games,'aggregated_data.json')
         compare_goals()
         print("""
