@@ -95,7 +95,7 @@ def calculate_stats(data, filename):
             jersey_data[jersey] = 1
     aggregated_data["Jersey"] = jersey_data
     
-    # inclui os tipos de gols e conta a frequência de cada um
+   
     goal_types = {}
     with open('goal_data.json', 'r') as f:
         goal_data = json.load(f)
@@ -120,15 +120,13 @@ def save_data_to_csv(data, filename):
     print(f"Data saved to {filename}")
 
 def compare_goals():
-     # carrega os dados do arquivo table_data.json
+
     with open('game_data.json', 'r') as f:
         table_data = json.load(f)
 
-    # carrega os dados do arquivo goal_data.json
     with open('goal_data.json', 'r') as f:
         goal_data = json.load(f)
 
-    # cria um dicionário que usa a Date como chave e contém informações do jogo e dos gols marcados
     game_data = {}
 
     for game in table_data:
@@ -148,6 +146,7 @@ if __name__ == "__main__":
     
     urlGames = "https://messi.starplayerstats.com/en/games/0/0/all/0/0/0/t/0/0/0/1"
     urlGoals = "https://messi.starplayerstats.com/en/goals/0/0/all/0/0/0/t/all/all/0/0/1"
+
     try:
         html_games = make_request(urlGames)
         html_goals = make_request(urlGoals)
@@ -158,6 +157,7 @@ if __name__ == "__main__":
         save_data_to_json(data_games, "game_data.json")
         save_data_to_json(data_goals, "goal_data.json")
         save_data_to_csv(data_games, "game_data.csv")
+        save_data_to_csv(data_goals, "goal_data.csv")
         totals_json = calculate_stats(data_games,'aggregated_data.json')
         compare_goals()
         print("""
