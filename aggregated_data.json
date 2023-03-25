@@ -1,1 +1,21 @@
-{"Games": 1015, "Goals": 799, "Assists": 353, "Cards": 95, "Minutes": 83350, "Goals + Assists": 1152, "Goals per game": 0.79, "Club Goals": 701, "National Team Goals": 98, "Jersey": {"30": 98, "10": 805, "18": 24, "19": 88}, "Goal Types": {"": 1, "Right foot": 101, "Left foot": 668, "Head": 26, "Hip": 1, "Chest": 1, "Hand": 1}}
+{
+  "Games": 1017,
+  "Goals": 800,
+  "Assists": 353,
+  "Cards": 95,
+  "Minutes": 83530,
+  "Goals + Assists": 1153,
+  "Goals per game": 0.79,
+  "Club Goals": 701,
+  "National Team Goals": 99,
+  "Jersey": { "10": 806, "30": 99, "18": 24, "19": 88 },
+  "Goal Types": {
+    "Left foot": 669,
+    "": 1,
+    "Right foot": 101,
+    "Head": 26,
+    "Hip": 1,
+    "Chest": 1,
+    "Hand": 1
+  }
+}
