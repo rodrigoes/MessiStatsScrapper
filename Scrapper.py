@@ -1,8 +1,11 @@
 import csv
 import json
 import requests
+from datetime import datetime
 from bs4 import BeautifulSoup
 
+def str_to_date(date_str):
+    return datetime.strptime(date_str, '%d-%m-%Y')
 
 def make_request(url):
     response = requests.get(url)
@@ -69,8 +72,8 @@ def extract_goals(table):
     return data
 
 def save_data_to_json(data, filename):
-    with open(filename, "w") as outfile:
-        json.dump(data, outfile)
+    with open(filename, "w", encoding='utf-8') as outfile:
+        json.dump(data, outfile, ensure_ascii=False)
     print(f"Data saved to {filename}")
 
 def calculate_stats(data, filename):
@@ -83,9 +86,10 @@ def calculate_stats(data, filename):
         "Goals + Assists": sum([int(game["Goals"]) + int(game["Assists"]) for game in data]),
         "Goals per game": round(sum([int(game["Goals"]) for game in data]) / len(data),2),
         "Club Goals": sum([int(game["Goals"]) for game in data if game["Away team"] != "Argentina" and game["Home team"] != "Argentina"]),
-        "National Team Goals": sum([int(game["Goals"]) for game in data if game["Away team"] == "Argentina" or game["Home team"] == "Argentina"]),
+        "Barcelona Goals": sum([int(game["Goals"]) if str_to_date(game["Date"])<= str_to_date("10-08-2021") else 0 for game in data if game["Away team"] == "FC Barcelona" or game["Home team"] == "FC Barcelona"]),
+        "National Team Goals": sum([int(game["Goals"]) for game in data if game["Away team"] == "Argentina" or game["Home team"] == "Argentina"])
     }
-    
+  
     jersey_data = {}
     for game in data:
         jersey = int(game["Jersey"])
@@ -107,8 +111,8 @@ def calculate_stats(data, filename):
             goal_types[goal_type] = 1
     aggregated_data["Goal Types"] = goal_types
     
-    with open(filename, "w") as outfile:
-        json.dump(aggregated_data, outfile)
+    with open(filename, "w", encoding='utf-8') as outfile:
+        json.dump(aggregated_data, outfile, ensure_ascii=False)
     print(f"Data saved to {filename}")
 
 def save_data_to_csv(data, filename):
@@ -139,8 +143,8 @@ def compare_goals():
         if date in game_data:
             game_data[date]['Goals'].append(goal)
 
-    with open('game_data_expanded.json', 'w') as f:
-        json.dump(list(game_data.values()), f, indent=4)
+    with open('game_data_expanded.json', 'w', encoding='utf-8') as f:
+        json.dump(list(game_data.values()), f, indent=4, ensure_ascii=False)
         
 if __name__ == "__main__":
     
@@ -157,7 +161,7 @@ if __name__ == "__main__":
         save_data_to_json(data_games, "game_data.json")
         save_data_to_json(data_goals, "goal_data.json")
         save_data_to_csv(data_games, "game_data.csv")
-        save_data_to_csv(data_goals, "goal_data.csv")
+        #save_data_to_csv(data_goals, "goal_data.csv")
         totals_json = calculate_stats(data_games,'aggregated_data.json')
         compare_goals()
         print("""
@@ -170,7 +174,8 @@ if __name__ == "__main__":
                                                         
             Data Source: https://messi.starplayerstats.com
 """)
-    
+   
+
     except Exception as e:
         print(f"Error: {e}")
 
