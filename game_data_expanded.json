@@ -1,5 +1,59 @@
 [
     {
+        "Game": "1018",
+        "Date": "28-03-2023",
+        "Competition": "International friendly",
+        "Home team": "Argentina",
+        "Result": "7-0",
+        "Away team": "CuraÃ§ao",
+        "Lineup": "Starter",
+        "Minutes": "90",
+        "Goals": [
+            {
+                "Number": "803",
+                "Date": "28-03-2023",
+                "Competiton": "International friendly",
+                "Home team": "Argentina",
+                "Result": "7-0",
+                "Away team": "CuraÃ§ao",
+                "Minute": "37",
+                "Score": "5-0",
+                "Whats": "Field goal",
+                "How": "Left foot",
+                "Jersey": "10"
+            },
+            {
+                "Number": "802",
+                "Date": "28-03-2023",
+                "Competiton": "International friendly",
+                "Home team": "Argentina",
+                "Result": "7-0",
+                "Away team": "CuraÃ§ao",
+                "Minute": "33",
+                "Score": "3-0",
+                "Whats": "Field goal",
+                "How": "Left foot",
+                "Jersey": "10"
+            },
+            {
+                "Number": "801",
+                "Date": "28-03-2023",
+                "Competiton": "International friendly",
+                "Home team": "Argentina",
+                "Result": "7-0",
+                "Away team": "CuraÃ§ao",
+                "Minute": "20",
+                "Score": "1-0",
+                "Whats": "Field goal",
+                "How": "Right foot",
+                "Jersey": "10"
+            }
+        ],
+        "Assists": "1",
+        "Cards": "0",
+        "Jersey": "10"
+    },
+    {
         "Game": "1017",
         "Date": "24-03-2023",
         "Competition": "International friendly",
