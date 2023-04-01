@@ -1,4 +1,3 @@
-# Messi Dashboard
-Este projeto consiste em uma dashboard de estatísticas do jogador Lionel Messi, uma das maiores lendas do futebol mundial. A dashboard exibe informações relevantes sobre seu desempenho em campo, incluindo o número de gols, assistências, entre outras métricas.
+# Messi Stats
 
-Os dados utilizados neste projeto foram obtidos por meio de webscrapping, utilizando a biblioteca Beautiful Soup, para extrair informações do site https://messi.starplayerstats.com
+O objetivo deste projeto é extrair as estatísticas do jogador Lionel Messi do site http://messi.starplayerstats.com/en/ usando Beautiful Soup e Python. Em seguida, o script calcula algumas métricas e armazena os resultados em arquivos JSON. Uma API usando o FastAPI é criada para consumir esses dados.
