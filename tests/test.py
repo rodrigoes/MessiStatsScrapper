@@ -1,4 +1,4 @@
-from MessiDashboard.src.Scrapper import str_to_date,make_request
+from src.Scrapper import str_to_date,make_request
 
 import datetime
 
