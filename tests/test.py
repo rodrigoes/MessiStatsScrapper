@@ -1,5 +1,5 @@
 from MessiDashboard.src.Scrapper import str_to_date,make_request
-#C:\Users\Rodrigo\Documents\Messi\Github\MessiDashboard\src\Scrapper.py
+
 import datetime
 
 def test_str_to_date():
