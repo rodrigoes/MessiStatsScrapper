@@ -85,11 +85,19 @@ def calculate_stats(data, filename):
         "Minutes": sum([int(game["Minutes"]) for game in data]),
         "Goals + Assists": sum([int(game["Goals"]) + int(game["Assists"]) for game in data]),
         "Goals per game": round(sum([int(game["Goals"]) for game in data]) / len(data),2),
-        "Club Goals": sum([int(game["Goals"]) for game in data if game["Away team"] != "Argentina" and game["Home team"] != "Argentina"]),
-        "Barcelona Goals": sum([int(game["Goals"]) if str_to_date(game["Date"])<= str_to_date("10-08-2021") else 0 for game in data if game["Away team"] == "FC Barcelona" or game["Home team"] == "FC Barcelona"]),
         "National Team Goals": sum([int(game["Goals"]) for game in data if game["Away team"] == "Argentina" or game["Home team"] == "Argentina"])
     }
-  
+
+    club_goals = {
+        "total": sum([int(game["Goals"]) for game in data if game["Away team"] != "Argentina" and game["Home team"] != "Argentina"]),
+        "FC Barcelona": sum([int(game["Goals"]) if str_to_date(game["Date"])<= str_to_date("10-08-2021") else 0 for game in data if game["Away team"] == "FC Barcelona" or game["Home team"] == "FC Barcelona"]),
+        "Paris Saint-Germain": sum([int(game["Goals"]) if str_to_date(game["Date"])> str_to_date("10-08-2021") else 0 for game in data if game["Away team"] == "Paris Saint-Germain" or game["Home team"] == "Paris Saint-Germain"]),
+        "Inter Miami CF":  sum([int(game["Goals"]) for game in data if game["Away team"] == "Inter Miami CF" or game["Home team"] == "Inter Miami CF"]),
+    }
+    
+    aggregated_data["Club Goals"] = club_goals
+
+    
     jersey_data = {}
     for game in data:
         jersey = int(game["Jersey"])

@@ -16,7 +16,7 @@ async def read_aggregated_data():
     return data
 
 @app.get("/games")
-async def read_game_data_expanded():
+async def read_game_data_e0xpanded():
     with open("game_data_expanded.json", "r") as file:
         data = json.load(file)
     return data
